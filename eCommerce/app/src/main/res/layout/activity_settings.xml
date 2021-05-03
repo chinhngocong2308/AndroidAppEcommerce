@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_settings"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimaryDark"
+        >
+        <Toolbar
+            android:id="@+id/toolbar_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/close_settings_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:src="@drawable/prev_arrow"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentStart="true"
+                    />
+                <ImageView
+                    android:id="@+id/update_account_settings_btn"
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:src="@drawable/refesh"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_alignParentEnd="true"
+                    />
+
+            </RelativeLayout>
+
+        </Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+    <TextView
+        android:id="@+id/title_info_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/app_bar_settings"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:text="Thay đổi thông tin cá nhân"
+        android:textColor="@color/gray"
+        android:textStyle="bold"
+        />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/settings_profile_image"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_below="@+id/title_info_activity"
+        android:src="@drawable/profile"
+        android:layout_centerHorizontal="true"
+
+        />
+    <TextView
+        android:id="@+id/profile_image_change_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CHANGE IMAGE"
+        android:textColor="@android:color/darker_gray"
+        android:textStyle="bold"
+        android:fontFamily="@font/markerfield_w00_regular"
+        android:layout_below="@+id/settings_profile_image"
+        android:textSize="30dp"
+        android:layout_margin="5dp"
+        android:layout_marginRight="15dp"
+        android:layout_centerHorizontal="true"
+        />
+    <EditText
+        android:id="@+id/settings_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_image_change_btn"
+        android:hint="Số điện thoại liên hệ giao hàng..."
+        android:layout_margin="15dp"
+        android:padding="10dp"
+        />
+    <EditText
+        android:id="@+id/settings_full_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/settings_phone_number"
+        android:hint="Họ tên..."
+        android:layout_margin="15dp"
+        android:padding="10dp"
+        />
+    <EditText
+        android:id="@+id/settings_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/settings_full_name"
+        android:hint="Địa chỉ..."
+        android:layout_margin="15dp"
+        android:padding="10dp"
+        />
+    <EditText
+        android:id="@+id/checked_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/settings_address"
+        android:hint="Mật khẩu xác nhận"
+        android:inputType="textPassword"
+        android:layout_margin="15dp"
+        android:padding="10dp"
+        />
+</RelativeLayout>
