@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:text="User Name"
+        android:text="Chưa đăng nhập"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 

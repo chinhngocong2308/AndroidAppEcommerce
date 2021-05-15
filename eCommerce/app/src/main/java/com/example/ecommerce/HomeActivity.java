@@ -36,11 +36,11 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
+
 import java.text.NumberFormat;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
-{
+        implements NavigationView.OnNavigationItemSelectedListener {
     private DatabaseReference ProductsRef;
     private RecyclerView recyclerView;
 
@@ -63,8 +63,8 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+              Intent intent = new Intent(HomeActivity.this, CartActivity.class);
+              startActivity(intent);
             }
         });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -80,13 +80,18 @@ public class HomeActivity extends AppCompatActivity
         TextView userNameTextView = headerView.findViewById(R.id.user_profile_name);
         CircleImageView profileImageView = headerView.findViewById(R.id.user_profile_image);
 
-        try
-        {
+
+        NavigationView navigationViews = (NavigationView) findViewById(R.id.nav_view);
+        Menu nv = navigationViews.getMenu();
+        MenuItem nav_logoutTextView = nv.findItem(R.id.nav_logout);
+        try {
+            if (Prevalent.currentOnlineUser == null) {
+                nav_logoutTextView.setTitle("Đăng nhập");
+            }
             userNameTextView.setText(Prevalent.currentOnlineUser.getName());
             Picasso.get().load(Prevalent.currentOnlineUser.getImage()).placeholder(R.drawable.profile).into(profileImageView);
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -102,20 +107,30 @@ public class HomeActivity extends AppCompatActivity
 
         FirebaseRecyclerOptions<Products> options =
                 new FirebaseRecyclerOptions.Builder<Products>()
-                .setQuery(ProductsRef, Products.class)
-                .build();
+                        .setQuery(ProductsRef, Products.class)
+                        .build();
 
         FirebaseRecyclerAdapter<Products, ProductViewHolder> adapter =
                 new FirebaseRecyclerAdapter<Products, ProductViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull Products model)
-                    {
+                    protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull Products model) {
                         holder.txtProductName.setText(model.getPname());
                         holder.txtProductDescription.setText(model.getDescription());
 //                        String price = model.getPrice();
 //                        holder.txtProductPrice.setText("Giá" + NumberFormat.getCurrencyInstance(new Locale("en", "US"))
 //                                .format(price) + "VNĐ");
                         holder.txtProductPrice.setText("Giá: " + model.getPrice() + "đ");
+                        Picasso.get().load(model.getImage()).into(holder.imageView);
+
+
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(HomeActivity.this, ProductDetailsActivity.class);
+                                intent.putExtra("pid", model.getPid());
+                                startActivity(intent);
+                            }
+                        });
 
                         String urls = model.getImage();
                         Picasso.get().load(urls).into(holder.imageView);
@@ -125,8 +140,7 @@ public class HomeActivity extends AppCompatActivity
 
                     @NonNull
                     @Override
-                    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
-                    {
+                    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.products_items_layout, parent, false);
                         ProductViewHolder holder = new ProductViewHolder(view);
                         return holder;
@@ -156,8 +170,7 @@ public class HomeActivity extends AppCompatActivity
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
 //        if (id == R.id.action_settings)
@@ -170,30 +183,21 @@ public class HomeActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item)
-    {
+    public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_cart)
-        {
-
-        }
-        else if (id == R.id.nav_orders)
-        {
-
-        }
-        else if (id == R.id.nav_categories)
-        {
-
-        }
-        else if (id == R.id.nav_settings)
-        {
-            Intent intent  = new Intent(HomeActivity.this, SettingsActivity.class);
+        if (id == R.id.nav_cart) {
+            Intent intent = new Intent(HomeActivity.this, CartActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.nav_logout)
-        {
+        } else if (id == R.id.nav_orders) {
+
+        } else if (id == R.id.nav_categories) {
+
+        } else if (id == R.id.nav_settings) {
+            Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_logout) {
             Paper.book().destroy();
 
             Intent intent = new Intent(HomeActivity.this, MainActivity.class);
