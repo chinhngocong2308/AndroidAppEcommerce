@@ -35,7 +35,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private ImageView productImage;
     private ElegantNumberButton numberButton;
     private TextView productPrice, productDescription, productName;
-    private String productID = "";
+    private String productID = "", state = "Normal";
 
 
     @Override
@@ -56,10 +56,25 @@ public class ProductDetailsActivity extends AppCompatActivity {
         addToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addingToCartList();
+
+                if (state.equals("Đã đặt hàng") || state.equals("Đang giao hàng"))
+                {
+                    Toast.makeText(ProductDetailsActivity.this, "Bạn chưa thể đặt hàng lúc này! Đơn hàng gần nhất của bạn đang được xử lý!", Toast.LENGTH_LONG).show();
+
+                }
+                else
+                {
+                    addingToCartList();
+                }
             }
         });
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        CheckOrderState();
     }
 
     private void addingToCartList() {
@@ -139,5 +154,39 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             }
         });
+    }
+    private void CheckOrderState()
+    {
+        DatabaseReference ordersRef;
+        try {
+            ordersRef = FirebaseDatabase.getInstance().getReference().child("Orders").child(Prevalent.currentOnlineUser.getPhone());
+            ordersRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists())
+                    {
+                        String shippingState = snapshot.child("state").getValue().toString();
+
+                        if (shippingState.equals("Đang giao hàng"))
+                        {
+                            state = "Đang giao hàng";
+                        }
+                        else if(shippingState.equals("Chưa giao hàng"))
+                        {
+                            state = "Đã đặt hàng";
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 }

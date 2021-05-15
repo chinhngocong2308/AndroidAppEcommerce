@@ -69,6 +69,8 @@ public class CartActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        CheckOrderState();
+
         final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List");
         try {
             if (Prevalent.currentOnlineUser == null) {
@@ -160,5 +162,52 @@ public class CartActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void CheckOrderState()
+    {
+        DatabaseReference ordersRef;
+      try {
+          ordersRef = FirebaseDatabase.getInstance().getReference().child("Orders").child(Prevalent.currentOnlineUser.getPhone());
+          ordersRef.addValueEventListener(new ValueEventListener() {
+              @Override
+              public void onDataChange(@NonNull DataSnapshot snapshot) {
+                  if (snapshot.exists())
+                  {
+                      String shippingState = snapshot.child("state").getValue().toString();
+                      String username = snapshot.child("name").getValue().toString();
+
+                      if (shippingState.equals("Đang giao hàng"))
+                      {
+                          textTotalAmount.setText("Gửi" + username + "\n Đơn hàng đã được giao.");
+                          txtMsg1.setVisibility(View.VISIBLE);
+                          txtMsg1.setText("Xin cảm ơn! Đơn hàng của bạn đã được đặt, hãy tiếp tục đồng hành cùng chúng tôi nhé !");
+                          recyclerView.setVisibility(View.GONE);
+                          NextProcessBtn.setVisibility(View.GONE);
+
+                          Toast.makeText(CartActivity.this, "Bạn chỉ có thể mua hàng, khi đã nhận được đơn hàng cuối cùng của mình !", Toast.LENGTH_SHORT).show();
+                      }
+                      else if(shippingState.equals("Chưa giao hàng"))
+                      {
+                          textTotalAmount.setText("Xin vui lòng đợi. Đơn hàng của bạn đang được xử lý");
+                          txtMsg1.setVisibility(View.VISIBLE);
+                          recyclerView.setVisibility(View.GONE);
+                          NextProcessBtn.setVisibility(View.GONE);
+
+                          Toast.makeText(CartActivity.this, "Bạn chỉ có thể mua hàng, khi đã nhận được đơn hàng cuối cùng của mình !", Toast.LENGTH_SHORT).show();
+                      }
+                  }
+              }
+
+              @Override
+              public void onCancelled(@NonNull DatabaseError error) {
+
+              }
+          });
+      }catch (Exception e)
+      {
+          e.printStackTrace();
+      }
+
     }
 }

@@ -103,10 +103,8 @@ public class ConfirmFinalOrderActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful())
                 {
-                    FirebaseDatabase.getInstance().getReference().child("Cart List")
-                            .child("User view")
-                            .child(Prevalent.currentOnlineUser.getPhone())
-                            .removeValue()
+                    final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List");
+                            cartListRef.child("User View").child(Prevalent.currentOnlineUser.getPhone()).removeValue()
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
