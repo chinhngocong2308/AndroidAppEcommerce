@@ -41,6 +41,14 @@ public class ConfirmFinalOrderActivity extends AppCompatActivity {
         addressEditText = (EditText) findViewById(R.id.shippment_address);
         cityEditText = (EditText) findViewById(R.id.shippment_city);
 
+        String phoneorderold = Prevalent.currentOnlineUser.getPhoneOrder();
+        String fullnameold = Prevalent.currentOnlineUser.getName();
+        String addressold = Prevalent.currentOnlineUser.getAddress();
+
+        phoneEditText.setText(phoneorderold);
+        addressEditText.setText(addressold);
+        nameEditText.setText(fullnameold);
+
         confirmOrderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +95,7 @@ public class ConfirmFinalOrderActivity extends AppCompatActivity {
                 .child("Orders")
                 .child(Prevalent.currentOnlineUser.getPhone());
 
+
         HashMap<String, Object> ordersMap = new HashMap<>();
 
         ordersMap.put("totalAmount", totalAmount);
@@ -97,6 +106,7 @@ public class ConfirmFinalOrderActivity extends AppCompatActivity {
         ordersMap.put("date", saveCurrentDate);
         ordersMap.put("time", saveCurrentTime);
         ordersMap.put("state", "Chưa giao hàng");
+
 
         ordersRef.updateChildren(ordersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
